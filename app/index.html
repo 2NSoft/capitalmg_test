@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My university</title>
+    <link rel="stylesheet" href="./libs/normalize.css/normalize.css">
+    <link rel="stylesheet" href="./libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/min.main.css">
+    <link rel="stylesheet" href="./libs/toastr/build/toastr.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default container">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="nav-brand" href="/home" data-navigo>
+                    <img src="./images/students-cap.png" alt="logo">
+                </a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right nav-login-panel">
+                <li><a id="sign-in-btn" href="/signin" class="nav-btn" data-navigo>Sign in</a></li>
+                <li><a id="register-btn" href="/register" class="nav-btn" data-navigo>Register</a></li>
+            </ul>
+
+            <div class="collapse navbar-collapse nav-menu" id="nav-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/home" class="isActive" data-navigo>Home</a></li>
+                    <li><a href="/about" data-navigo>About</a></li>
+                    <!-- <li class="private-menu">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Blog</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/create/post" data-navigo>New Post</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/create/category" data-navigo>New Category</a>
+                        </div>
+                    </li> -->
+
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div id="app-container" class="container"></div>
+
+    <footer class="container">
+            <div class="footer-credits">Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
+                    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"
+                    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+            <div class="footer-copy">
+                Designed by <a href="/about" data-navigo>2NSoft</a>
+            </div>
+    </footer>
+
+    <script src='./libs/jquery/dist/jquery.min.js'></script>
+    <script src='./libs/tether/dist/js/tether.min.js'></script>
+    <script src='./libs/bootstrap/dist/js/bootstrap.min.js'></script>
+    <script src='./libs/toastr/build/toastr.min.js'></script>
+
+    <!-- Systemjs js setup-->
+    <script src="./libs/systemjs/dist/system.js"></script>
+    <script src="js/configs/system-config.js"></script>
+
+</body>
+
+</html>
