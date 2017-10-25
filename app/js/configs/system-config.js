@@ -12,13 +12,14 @@ System.config({
         'templates': 'js/utils/templates.js',
         'data': 'js/utils/data.js',
         'user': 'js/utils/user.js',
-        'setLink': 'js/utils/setLink.js',
+        'navUtils': 'js/utils/navUtils.js',
         'validator': 'js/helpers/validator.js',
         'quoteHelper': 'js/helpers/quote.helper.js',
 
         // Controllers
         'homeController': 'js/controllers/home.controller.js',
         'signinController': 'js/controllers/signin.controller.js',
+        'userConfirmController': 'js/controllers/userConfirm.controller.js',
         'registerController': 'js/controllers/register.controller.js',
 
         // Library files

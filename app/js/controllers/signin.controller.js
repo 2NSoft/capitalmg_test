@@ -14,7 +14,10 @@ export function get(router) {
                 user.signIn( {
                     username: $('#sign-in-username').val(),
                     password: $('#sign-in-password').val(),
-                });
+                })
+                .catch( () => {
+                    $('#sign-in-password').val('');
+                } );
             });
             $('#sign-in-register').click( (ev) => {
                 ev.preventDefault();

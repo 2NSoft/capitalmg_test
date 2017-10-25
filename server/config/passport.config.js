@@ -28,6 +28,8 @@ const configPassport = (app, data) => {
     app.use( session( {
         secret: 'Deus ex machina',
         maxAge: new Date( Date.now() + 60 * 60 * 1000 ),
+        resave: false,
+        saveUninitialized: true,
         store: new MongoStore(
             { url: data.sessionStoreName },
             ( err ) => {

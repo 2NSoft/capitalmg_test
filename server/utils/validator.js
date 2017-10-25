@@ -58,6 +58,10 @@ class Validator {
             Validator.password( password ) &&
             Validator.email( email );
     }
+
+    static validateRole() {
+        return true;
+    }
 }
 
 module.exports = Validator;

@@ -1,5 +1,31 @@
+const copyObject = require('./../../../../utils/copyObject');
+
 const init = (data) => {
     const controller = {
+        getUsers(req, res) {
+            return data.users.getAll()
+                .then((users) => {
+                    users = users
+                        .map((user) => {
+                            const result = copyObject(user);
+                            result.id = user.id;
+                            delete result.password;
+                            delete result._id;
+                            return result;
+                        });
+                    if (req.query.notconfirmed) {
+                        return users
+                            .filter((user) => !user.confirmed);
+                    }
+                    return users;
+                })
+                .then((users) => {
+                    return res.status(200).send(users);
+                })
+                .catch((err) => {
+                    return res.status(500).send(err);
+                });
+        },
         addUser(req, res) {
             const model = {
                 firstname: req.body.firstname,
@@ -39,13 +65,37 @@ const init = (data) => {
                 });
         },
         updateUser(req, res) {
+            if (!req.user) {
+                return res.status(400).send('You need to be logged in!');
+            }
+            if (req.body.updateRole) {
+                if (req.user.role !== 'administrator') {
+                    return res.status(403)
+                        .send('You need to be logged in as administrator!');
+                }
+                return Promise.all([
+                    data.users.findById(req.body.userId),
+                    data.roles.findById(req.body.role),
+                ])
+                    .then(([user, role]) => {
+                        user.role = role.rolename;
+                        user.confirmed = true;
+                        return data.users.updateById(user);
+                    })
+                    .then(() => {
+                        return res.status(200).send(req.body.userId);
+                    })
+                    .catch((err) => {
+                        return res.status(500).send(err);
+                    });
+            }
             return data.users.findById(req.user.id)
                 .then((user) => {
                     user.username = req.user.username;
                     user.email = req.body.email || user.email;
                     user.password = req.body.password || user.password;
                     if (req.file) {
-                        user.stringProfilePicture = req.file.filename;
+                        user.profilePic = req.file.filename;
                     }
                     if (!data.users.validator.isValid(user)) {
                         return Promise

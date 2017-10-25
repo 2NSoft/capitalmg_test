@@ -6,13 +6,15 @@ import Navigo from 'navigo';
 // Users
 import user from 'user';
 
-// Helpers
+// Helpers & Utils
 // import {VALIDATOR as VALIDATOR} from 'validator';
+import { setPrivateLinks } from 'navUtils';
 
 // Controllers
 import { get as homeController } from 'homeController';
 import { get as signinController } from 'signinController';
 import { get as registerController } from 'registerController';
+import { get as userConfirmController } from 'userConfirmController';
 
 // Navigo setup
 const root = null;
@@ -52,6 +54,15 @@ router
                 toastr.error(err);
             });
     })
+    .on('/admin/users/confirm', () => {
+        return userConfirmController(router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
     .notFound(() => {
         console.log('Not found');
     })
@@ -62,10 +73,7 @@ user.onStatusChange = (usr) => {
     const signInBtn = $('#sign-in-btn');
     const registerBtn = $('#register-btn');
     if (usr.signedIn) {
-        $('.private-menu')
-            .each((index, menu) => {
-                $(menu).show();
-            });
+        setPrivateLinks(user.role);
         registerBtn.hide();
         signInBtn.text('Sign out');
         signInBtn.attr('href', '/home');
@@ -75,10 +83,7 @@ user.onStatusChange = (usr) => {
             initial = false;
         }
     } else {
-        $('.private-menu')
-            .each((index, menu) => {
-                $(menu).hide();
-            });
+        setPrivateLinks(user.role);
         registerBtn.show();
         signInBtn.text('Sign in');
         signInBtn.attr('href', '/signin');

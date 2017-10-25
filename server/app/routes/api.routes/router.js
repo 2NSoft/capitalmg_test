@@ -4,6 +4,8 @@ const copyObject = require('./../../../utils/copyObject');
 const attach = (app, data) => {
     const userController =
         require('./controllers/user.controller').init(data);
+    const roleController =
+        require('./controllers/role.controller').init(data);
 
     app.get('/api/v1/auth', (req, res) => {
         if (req.user) {
@@ -56,10 +58,11 @@ const attach = (app, data) => {
     });
 
     app.put('/api/v1/users', (req, res) => {
-        if (!req.user) {
-            return res.status(400).send('You need to be logged in!');
-        }
         return userController.updateUser(req, res);
+    });
+
+    app.get('/api/v1/roles', (req, res) => {
+        return roleController.getRoles(req, res);
     });
 };
 

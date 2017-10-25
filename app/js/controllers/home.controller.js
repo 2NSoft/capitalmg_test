@@ -1,7 +1,7 @@
 /* globals $ */
 
 import { load as loadTemplate } from 'templates';
-import { setActiveLink } from 'setLink';
+import { setActiveLink } from 'navUtils';
 
 const $appContainer = $('#app-container');
 

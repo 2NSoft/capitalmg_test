@@ -1,6 +1,7 @@
 /* globals $ toastr */
 
 const $menu = $('.navbar-collapse ul');
+const $private = $('[data-privacy]');
 
 const setActiveLink = (linkName) => {
     $menu
@@ -15,4 +16,18 @@ const setActiveLink = (linkName) => {
         });
 };
 
-module.exports = { setActiveLink };
+const setPrivateLinks = ( role ) => {
+    $private.each((index, link) => {
+        const $link = $(link);
+        if ($link.attr('data-privacy') === `${role}-menu`) {
+            $link.show();
+        } else {
+            $link.hide();
+        }
+    });
+};
+
+module.exports = {
+    setActiveLink,
+    setPrivateLinks,
+ };

@@ -46,7 +46,7 @@ class User {
             });
     }
     signIn(userSignInData) {
-        $.post('/api/v1/auth', userSignInData)
+        return $.post('/api/v1/auth', userSignInData)
             .then((userData) => {
                 this._setUser(userData);
                 toastr.success(`Welcome: ${this.username}`);
@@ -54,6 +54,7 @@ class User {
             .catch((err) => {
                 this._setUser(null);
                 toastr.error(err.responseText);
+                return Promise.reject(err);
             });
     }
     signOut() {
