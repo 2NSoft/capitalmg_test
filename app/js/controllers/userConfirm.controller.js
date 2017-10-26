@@ -39,12 +39,35 @@ const updateButtonState = () => {
         .prop('disabled', $role.val() === '');
 };
 
+const formSubmit = (ev) => {
+    ev.preventDefault();
+    const roleInfo = {
+        userId: $select.val(),
+        role: $role.val(),
+        updateRole: true,
+    };
+    data.updateUserRole( roleInfo )
+        .then( (userId) => {
+            users.splice(
+                users.findIndex( (usr) => {
+                    return usr.id === userId;
+                }), 1 );
+            $select.children(`[value=${userId}]`).remove();
+            $select.children().eq(0).prop('selected', true );
+            updateUserDetails();
+            toastr.success('User successfully updated!');
+        })
+        .catch( (err) => {
+            toastr.error( err, 'Could not set role!');
+        });
+};
+
 let users = [];
 
 export function get(router) {
     return user.checkStatus()
         .then((currUser) => {
-            if (!currUser.role === 'administrator') {
+            if (currUser.role !== 'administrator') {
                 router.navigate('/unauthorized');
                 return Promise.reject('Unauthorized access attempted!');
             }
@@ -67,27 +90,6 @@ export function get(router) {
             $role.on('change', updateButtonState);
             $select.on('change', updateUserDetails);
             updateUserDetails();
-            $('form').submit( (ev) => {
-                ev.preventDefault();
-                const roleInfo = {
-                    userId: $select.val(),
-                    role: $role.val(),
-                    updateRole: true,
-                };
-                data.updateUserRole( roleInfo )
-                    .then( (userId) => {
-                        users.splice(
-                            users.findIndex( (usr) => {
-                                return usr.id === userId;
-                            }), 1 );
-                        $select.children(`[value=${userId}]`).remove();
-                        $select.children().eq(0).prop('selected', true );
-                        updateUserDetails();
-                        toastr.success('User successfully updated!');
-                    })
-                    .catch( (err) => {
-                        toastr.error( err, 'Could not set role!');
-                    });
-            });
+            $('form').submit( formSubmit );
         });
 }

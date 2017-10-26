@@ -1,0 +1,19 @@
+<main>
+    <div>
+        <form>
+            <div class="form-group">
+                <label for="question-select">Select Question Type</label>
+                <select id="question-select" name="question-select" class="form-control">
+                    <option value="" selected></option>
+                    {{#each questionTypes}}
+                        <option value="{{@index}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <button class="btn btn-success pull-right">Select</button>
+        </form>
+    </div>
+    <div id="question-preview">
+
+    </div>
+</main>

@@ -1,3 +1,5 @@
+@require 'globals/colors';
+
 .nav-brand
     img
         width: 128px;
@@ -7,17 +9,17 @@
     right: 15px;
     top: 0px;
     padding: 5px;
-    border-color: #e7e7e7;
+    border-color: border-color-footer;
     li
         display: inline-block !important;
     .nav-btn
         padding: 5px 15px;
-        background: rgba( 0, 109, 240, 1) !important;
+        background: bg-color-ligthblue !important;
         border-radius: 3px;
-        color: white !important;
+        color: color-white !important;
         margin: 5px;
         &:hover
-            background: rgba( 0, 50, 220, .8) !important;
+            background: bg-color-ligthblue-active !important;
 @media (min-width:768px)
     .nav-menu
         position: absolute;
@@ -27,7 +29,7 @@
         .open 
             .dropdown-menu
                 left: -76px;
-                background-color: #f8f8f8;
+                background-color: #bg-color-nav;
 
 @media (max-width:767px)
     .collapse

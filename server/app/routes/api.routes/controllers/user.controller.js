@@ -17,6 +17,16 @@ const init = (data) => {
                         return users
                             .filter((user) => !user.confirmed);
                     }
+                    if (req.query.role) {
+                        return users
+                        .filter((user) => user.role === req.query.role )
+                        .map((user) => {
+                            return {
+                                fullName: `${user.firstname} ${user.lastname}`,
+                                id: user.id,
+                            };
+                         });
+                    }
                     return users;
                 })
                 .then((users) => {
@@ -80,7 +90,13 @@ const init = (data) => {
                     .then(([user, role]) => {
                         user.role = role.rolename;
                         user.confirmed = true;
-                        return data.users.updateById(user);
+                        return Promise.all([
+                            data.users.updateById(user),
+                            data[role.userType+'s'].create({
+                                userId: user._id + '',
+                                name: `${user.firstname} ${user.lastname}`,
+                            }),
+                        ]);
                     })
                     .then(() => {
                         return res.status(200).send(req.body.userId);

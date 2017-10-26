@@ -24,8 +24,25 @@ const updateUserRole = (data) => {
     return $.put('/api/v1/users', data);
 };
 
+const getDocents = () => {
+    return $.get('/api/v1/users?role=docent');
+};
+
+const getCourseCreateData = () => {
+    return Promise.all([
+        getDocents(),
+    ]);
+};
+
+const addCourse = (model) => {
+    return $.post('/api/v1/courses', model);
+};
+
 module.exports = {
     getUserConfirmData,
+    getCourseCreateData,
+
+    addCourse,
 
     updateUserRole,
 };

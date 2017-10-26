@@ -1,4 +1,5 @@
 /* globals System */
+/* eslint-disable max-len */
 System.config({
     transpiler: 'plugin-babel',
     map: {
@@ -20,6 +21,8 @@ System.config({
         'homeController': 'js/controllers/home.controller.js',
         'signinController': 'js/controllers/signin.controller.js',
         'userConfirmController': 'js/controllers/userConfirm.controller.js',
+        'examQuestionsController': 'js/controllers/exam.questions.controller.js',
+        'courseCreateController': 'js/controllers/course.create.controller.js',
         'registerController': 'js/controllers/register.controller.js',
 
         // Library files

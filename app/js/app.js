@@ -14,6 +14,8 @@ import { setPrivateLinks } from 'navUtils';
 import { get as homeController } from 'homeController';
 import { get as signinController } from 'signinController';
 import { get as registerController } from 'registerController';
+import { get as examQuestionsController } from 'examQuestionsController';
+import { get as courseCreateController } from 'courseCreateController';
 import { get as userConfirmController } from 'userConfirmController';
 
 // Navigo setup
@@ -56,6 +58,24 @@ router
     })
     .on('/admin/users/confirm', () => {
         return userConfirmController(router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
+    .on('/admin/courses/create', () => {
+        return courseCreateController(router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
+    .on('/docent/exam/questions', () => {
+        return examQuestionsController(router)
             .then(() => {
                 router.updatePageLinks();
             })

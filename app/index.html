@@ -35,10 +35,22 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/home" class="isActive" data-navigo>Home</a></li>
                     <li><a href="/about" data-navigo>About</a></li>
-                    <li data-privacy="administrator-menu">
+                    <li data-privacy="administrator-menu" style="display: none;">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Users</a>
                         <div class="dropdown-menu">
                         <a class="dropdown-item" href="/admin/users/confirm" data-navigo>Confirm accounts</a>
+                        </div>
+                    </li>
+                    <li data-privacy="administrator-menu" style="display: none;">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Courses</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/admin/courses/create" data-navigo>Create course</a>
+                        </div>
+                    </li>
+                    <li data-privacy="docent-menu" style="display: none;">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exam</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/docent/exam/questions" data-navigo>Create questions</a>
                         </div>
                     </li>
                 </ul>

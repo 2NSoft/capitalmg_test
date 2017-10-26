@@ -6,6 +6,8 @@ const attach = (app, data) => {
         require('./controllers/user.controller').init(data);
     const roleController =
         require('./controllers/role.controller').init(data);
+    const courseController =
+        require('./controllers/course.controller').init(data);
 
     app.get('/api/v1/auth', (req, res) => {
         if (req.user) {
@@ -63,6 +65,14 @@ const attach = (app, data) => {
 
     app.get('/api/v1/roles', (req, res) => {
         return roleController.getRoles(req, res);
+    });
+
+    app.get('/api/v1/courses', (req, res) => {
+        return courseController.getCourses(req, res);
+    });
+
+    app.post('/api/v1/courses', (req, res) => {
+        return courseController.addCourse(req, res);
     });
 };
 
