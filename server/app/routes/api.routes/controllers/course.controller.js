@@ -1,15 +1,13 @@
-const copyObject = require('./../../../../utils/copyObject');
-
 const init = (data) => {
     const controller = {
         getCourses(req, res) {
             return data.courses.getAll()
                 .then((courses) => {
                     courses = courses.map((course) => {
-                        const result = copyObject(course);
-                        result.id = courses.id;
-                        delete result._id;
-                        return result;
+                        return {
+                            id: course.id + '',
+                            name: course.name,
+                        };
                     });
                     return res.status(200).send(courses);
                 })
@@ -61,7 +59,6 @@ const init = (data) => {
                         .send( `Course "${name}" successfully created.` );
                 })
                 .catch( (err) => {
-                    console.log(err);
                     return res.status(500).send(err);
                 });
         },

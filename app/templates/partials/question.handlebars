@@ -1,0 +1,38 @@
+{{#if preview}}
+    <h2 class="alert alert-success">Complete the correct answer</h2>
+{{/if}}
+<h4>{{title}}</h4>
+<form>
+    {{#if ranking}}
+        <div class="form-group">
+        {{#each options}} 
+            <div class="form-control" id="answer-option-{{@index}}">
+                <p class="answer">{{{this}}}</p>
+            </div>
+        {{/each}} 
+        </div>
+    {{/if}} 
+    {{#if multiple}} 
+        {{#each options}} 
+        <div class="checkbox">
+            <label><input type="checkbox" id="answer-option-{{@index}}" name="answer-option-{{@index}}" value="{{this}}">{{{this}}}</label>
+        </div>
+        {{/each}} 
+    {{/if}} 
+    {{#if single}}
+        {{#each options}} 
+        <div class="radio">
+            <label><input type="radio" name="answer" id="answer-option-{{@index}}" value="{{this}}">{{{this}}}</label>
+        </div>
+        {{/each}} 
+    {{/if}} 
+    {{#if open}}
+        <div class="form-group">
+            <textarea id="answer-text" class="form-control" rows="10" disabled></textarea> 
+        </div>
+    {{/if}}
+    <button id="answer-btn-submit" class="btn btn-success pull-right">Submit</button>
+    {{#if preview}}
+        <button id="answer-btn-revert" class="btn btn-primary">Revert</button>
+    {{/if}}
+</form>

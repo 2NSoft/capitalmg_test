@@ -1,19 +1,29 @@
 <main>
-    <div>
+    <div id="question-create">
         <form>
             <div class="form-group">
-                <label for="question-select">Select Question Type</label>
-                <select id="question-select" name="question-select" class="form-control">
-                    <option value="" selected></option>
-                    {{#each questionTypes}}
-                        <option value="{{@index}}">{{this}}</option>
+                <label for="question-course">Select Course</label>
+                <select id="question-course" name="question-course" class="form-control">
+                    {{#each courses}}
+                        <option value="{{id}}" {{#unless @index}} selected {{/unless}}>{{name}}</option>
                     {{/each}}
                 </select>
             </div>
-            <button class="btn btn-success pull-right">Select</button>
+            <div class="form-group">
+                <label for="question-type">Select Question Type</label>
+                <select id="question-type" name="question-type" class="form-control">
+                    {{#each questionTypes}}
+                        <option value="{{id}}" {{#unless @index}} selected {{/unless}}>{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <span id="question-insert-placeholder"></span>
+            <button id="question-btn-continue" class="btn btn-success pull-right">Continue</button>
+            <button id="question-btn-revert" class="btn btn-primary" style="display:none;">Revert</button>
+            <button id="question-btn-review" class="btn btn-success pull-right" style="display:none;">Review</button>
         </form>
     </div>
-    <div id="question-preview">
+    <div id="question-preview" style="display: none;">
 
     </div>
 </main>

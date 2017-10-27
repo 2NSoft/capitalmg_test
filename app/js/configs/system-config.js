@@ -14,6 +14,8 @@ System.config({
         'data': 'js/utils/data.js',
         'user': 'js/utils/user.js',
         'navUtils': 'js/utils/navUtils.js',
+        'jQueryFills': 'js/utils/jQueryFills.js',
+        'copyObject': 'js/utils/copyObject.js',
         'validator': 'js/helpers/validator.js',
         'quoteHelper': 'js/helpers/quote.helper.js',
 
@@ -27,6 +29,7 @@ System.config({
 
         // Library files
         'jquery': './libs/jquery/dist/jquery.min.js',
+        'jqueryui': './libs/jqueryui/jquery-ui.min.js',
         'navigo': './libs/navigo/lib/navigo.min.js',
         'handlebars': './libs/handlebars/dist/handlebars.min.js',
         'toastr': './libs/toastr/build/toastr.min.js',

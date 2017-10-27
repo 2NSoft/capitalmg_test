@@ -8,6 +8,8 @@ const attach = (app, data) => {
         require('./controllers/role.controller').init(data);
     const courseController =
         require('./controllers/course.controller').init(data);
+    const questionController =
+        require('./controllers/question.controller').init(data);
 
     app.get('/api/v1/auth', (req, res) => {
         if (req.user) {
@@ -73,6 +75,10 @@ const attach = (app, data) => {
 
     app.post('/api/v1/courses', (req, res) => {
         return courseController.addCourse(req, res);
+    });
+
+    app.get('/api/v1/questions', (req, res) => {
+        return questionController.getQuestions(req, res);
     });
 };
 

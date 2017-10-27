@@ -10,6 +10,10 @@ import user from 'user';
 // import {VALIDATOR as VALIDATOR} from 'validator';
 import { setPrivateLinks } from 'navUtils';
 
+// Polyfill jQuery
+import 'jQueryFills';
+
+
 // Controllers
 import { get as homeController } from 'homeController';
 import { get as signinController } from 'signinController';
