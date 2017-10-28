@@ -80,6 +80,10 @@ const attach = (app, data) => {
     app.get('/api/v1/questions', (req, res) => {
         return questionController.getQuestions(req, res);
     });
+
+    app.post('/api/v1/questions', (req, res) => {
+        return questionController.addQuestion(req, res);
+    });
 };
 
 module.exports = attach;

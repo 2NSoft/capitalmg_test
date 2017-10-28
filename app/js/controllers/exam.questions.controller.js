@@ -36,20 +36,54 @@ const createModel = () => {
         type: createIdNamePair($type),
     };
     if ($title) {
-        result.title = $title.val();
+        result.title = $title.val().replace(/\n/g, '<br>');
     }
     result.options = [];
     $('.option')
-        .each( (index, option ) => {
-            result.options.push( $(option).val().replace(/\n/g, '<br>') );
+        .each((index, option) => {
+            result.options.push($(option).val().replace(/\n/g, '<br>'));
         });
+    if ($preview) {
+        const $form = $preview.children('form');
+        result.correctAnswers = [];
+        switch (result.type.name) {
+            case 'Multiple choice': {
+                result.correctAnswers
+                    .push(result
+                        .options[$('input[name=answer]:checked')
+                        .val()]);
+                break;
+            }
+            case 'Multy select': {
+                $('input[type=checkbox]:checked')
+                    .each((index, option) => {
+                        result.correctAnswers
+                            .push(result.options[$(option).val()]);
+                    });
+                break;
+            }
+            case 'Open question': {
+                break;
+            }
+            case 'Ranking': {
+                $('.answer')
+                    .each((index, option) => {
+                        result.correctAnswers
+                            .push($(option).text());
+                    });
+                break;
+            }
+            default: break;
+        }
+        result.score = $('#question-score').val();
+    }
     return result;
 };
 
 const onInput = (ev) => {
     let enabled = true;
     $('.option')
-        .each( (index, element) => {
+        .each((index, element) => {
             enabled = enabled && $(element).val() !== '';
         });
     $review.prop('disabled', !enabled);
@@ -72,7 +106,7 @@ const onRevert = (ev) => {
             $type.enable();
             break;
         }
-        /* eslint-disable no-fallthrough, no-lone-blocks*/        
+        /* eslint-disable no-fallthrough, no-lone-blocks*/
         case 1: {
             $continue.text('Continue');
             $continue.enable();
@@ -87,7 +121,7 @@ const onRevert = (ev) => {
                 .remove();
             questionModel = createModel();
             const id = questionModel.options.length;
-            if (id>0) {
+            if (id > 0) {
                 $option = $(`#question-option-text-${id}`);
                 $option.focus();
                 $review.enable();
@@ -141,16 +175,16 @@ const onContinue = (ev) => {
             $continue.disable();
             const id = questionModel.options.length + 1;
             loadTemplate('partials/question.option', { id })
-            .then((partial) => {
-                const $questionOption = $(partial);
-                $questionOption
-                    .insertBefore($placeholder)
-                    .show(200);
-                $questionOptions.push( $questionOption );
-                $option = $(`#question-option-text-${id}`);
-                $option.on('input', onInput);
-                $option.focus();
-            });
+                .then((partial) => {
+                    const $questionOption = $(partial);
+                    $questionOption
+                        .insertBefore($placeholder)
+                        .show(200);
+                    $questionOptions.push($questionOption);
+                    $option = $(`#question-option-text-${id}`);
+                    $option.on('input', onInput);
+                    $option.focus();
+                });
             break;
         }
         /* eslint-enable no-fallthrough no-lone-blocks*/
@@ -194,20 +228,37 @@ const onReview = (ev) => {
         default: break;
     }
     loadTemplate('partials/question', questionModel)
-        .then( (partial) => {
+        .then((partial) => {
             $preview
                 .html(partial)
                 .show(200);
             $('.answer')
-                .draggable( {
+                .draggable({
                     helper: 'clone',
                 });
             $('.answer').droppable({
-                    accept: '.answer',
-                    drop: dragDrop,
-                });
+                accept: '.answer',
+                drop: dragDrop,
+            });
             $('form').submit((evnt) => evnt.preventDefault()); // disable submit
-            $('#answer-btn-revert').on('click', onRevertQuestion );
+            $('#answer-btn-revert').on('click', onRevertQuestion);
+            $('#answer-btn-submit').on('click', onSubmitQuestion);
+        });
+};
+
+const onSubmitQuestion = (ev) => {
+    ev.preventDefault();
+    questionModel = createModel();
+    data.addQuestion( questionModel )
+        .then( () => {
+            toastr.success( 'Question succesfully added!');
+            $preview
+                .hide(200)
+                .html('');
+            get();
+        })
+        .catch( (err) => {
+            toastr.error( err, 'Something went wrong!');
         });
 };
 
@@ -216,21 +267,24 @@ const onRevertQuestion = (ev) => {
     $create.show(200);
     $preview
         .hide(200)
-        .html();
+        .html('');
     if ($option) {
         $option.focus();
     }
 };
-
-export function get(router) {
+let router;
+export function get(_router) {
+    if (_router) {
+        router = _router;
+    }
     questionModel = {};
     stages = [];
     return user.checkStatus()
         .then((currUser) => {
-            // if (currUser.role !== 'docent') {
-            //     router.navigate('/unauthorized');
-            //     return Promise.reject('Unauthorized access attempted!');
-            // }
+            if (currUser.role !== 'docent') {
+                router.navigate('/unauthorized');
+                return Promise.reject('Unauthorized access attempted!');
+            }
             return data.getQuestionData();
         })
         .then(([courses, questionTypes]) => {
@@ -252,7 +306,7 @@ export function get(router) {
 
             $continue.on('click', onContinue);
             $revert.on('click', onRevert);
-            $review.on('click', onReview );
+            $review.on('click', onReview);
 
             $('form').submit((ev) => ev.preventDefault()); // disable submit
         });

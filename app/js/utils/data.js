@@ -46,6 +46,10 @@ const addCourse = (model) => {
     return $.post('/api/v1/courses', model);
 };
 
+const addQuestion = (model) => {
+    return $.post('/api/v1/questions', model);
+};
+
 const getQuestionData = () => {
     return Promise.all([getCourses(), getQuestionTypes()]);
 };
@@ -56,6 +60,7 @@ module.exports = {
     getQuestionData,
 
     addCourse,
+    addQuestion,
 
     updateUserRole,
 };

@@ -18,6 +18,19 @@ const init = (data) => {
             }
             return true;
         },
+        addQuestion(req, res) {
+            if (req.user.role !== 'docent') {
+                return res
+                    .status(403).send('You need to be logged in as docent!');
+            }
+            return data.questions.create(req.body)
+                .then( (dbQuestion) => {
+                    return res.status(200).send(dbQuestion.id + '');
+                })
+                .catch( (err) => {
+                    return res.status(500).send(err);
+                });
+        },
     };
 
     return controller;

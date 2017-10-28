@@ -1,7 +1,7 @@
 {{#if preview}}
     <h2 class="alert alert-success">Complete the correct answer</h2>
 {{/if}}
-<h4>{{title}}</h4>
+<h4>{{{title}}}</h4>
 <form>
     {{#if ranking}}
         <div class="form-group">
@@ -15,20 +15,27 @@
     {{#if multiple}} 
         {{#each options}} 
         <div class="checkbox">
-            <label><input type="checkbox" id="answer-option-{{@index}}" name="answer-option-{{@index}}" value="{{this}}">{{{this}}}</label>
+            <label><input type="checkbox" id="answer-option-{{@index}}" name="answer-option-{{@index}}" value="{{@index}}">{{{this}}}</label>
         </div>
         {{/each}} 
     {{/if}} 
     {{#if single}}
         {{#each options}} 
         <div class="radio">
-            <label><input type="radio" name="answer" id="answer-option-{{@index}}" value="{{this}}">{{{this}}}</label>
+            <label><input type="radio" name="answer" id="answer-option-{{@index}}" value="{{@index}}">{{{this}}}</label>
         </div>
         {{/each}} 
     {{/if}} 
     {{#if open}}
         <div class="form-group">
-            <textarea id="answer-text" class="form-control" rows="10" disabled></textarea> 
+            <textarea id="answer-text" class="form-control" rows="10" {{#if preview}}disabled{{/if}}></textarea> 
+        </div>
+    {{/if}}
+    <hr class="divider">
+    {{#if preview}}
+        <div class="form-group">
+          <label for="question-score">Question Score</label>
+          <input type="number" name="question-score" id="question-score" class="form-control" min="1" max="50" value="10">
         </div>
     {{/if}}
     <button id="answer-btn-submit" class="btn btn-success pull-right">Submit</button>

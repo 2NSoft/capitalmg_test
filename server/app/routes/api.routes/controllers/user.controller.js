@@ -88,7 +88,7 @@ const init = (data) => {
                     data.roles.findById(req.body.role),
                 ])
                     .then(([user, role]) => {
-                        user.role = role.rolename;
+                        user.role = role.userType;
                         user.confirmed = true;
                         return Promise.all([
                             data.users.updateById(user),
