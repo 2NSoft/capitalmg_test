@@ -19,6 +19,7 @@ import { get as homeController } from 'homeController';
 import { get as signinController } from 'signinController';
 import { get as registerController } from 'registerController';
 import { get as examQuestionsController } from 'examQuestionsController';
+import { get as examCreateController } from 'examCreateController';
 import { get as courseCreateController } from 'courseCreateController';
 import { get as userConfirmController } from 'userConfirmController';
 
@@ -80,6 +81,15 @@ router
     })
     .on('/docent/exam/questions', () => {
         return examQuestionsController(router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
+    .on('/docent/exam/create', () => {
+        return examCreateController(router)
             .then(() => {
                 router.updatePageLinks();
             })

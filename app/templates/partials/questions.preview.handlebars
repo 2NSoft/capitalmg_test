@@ -1,0 +1,13 @@
+{{#each questions}}
+<div class="question-preview-container">
+    <form class="form-inline">
+        <div class="checkbox">
+            <label><input type="checkbox" name="question" class="exam-question-checkbox" value="{{id}}">{{{description}}}</label>
+            <button type="button" class="btn btn-preview pull-right">Preview</button>
+        </div>
+    </form>
+    <div class="question-preview">
+        {{{preview}}}
+    </div>
+</div>
+{{/each}}

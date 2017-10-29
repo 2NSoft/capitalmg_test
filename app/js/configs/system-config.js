@@ -24,12 +24,13 @@ System.config({
         'signinController': 'js/controllers/signin.controller.js',
         'userConfirmController': 'js/controllers/userConfirm.controller.js',
         'examQuestionsController': 'js/controllers/exam.questions.controller.js',
+        'examCreateController': 'js/controllers/exam.create.controller.js',
         'courseCreateController': 'js/controllers/course.create.controller.js',
         'registerController': 'js/controllers/register.controller.js',
 
         // Library files
-        'jquery': './libs/jquery/dist/jquery.min.js',
-        'jqueryui': './libs/jqueryui/jquery-ui.min.js',
+        // 'jquery': './libs/jquery/dist/jquery.min.js',
+        // 'jqueryui': './libs/jqueryui/jquery-ui.min.js',
         'navigo': './libs/navigo/lib/navigo.min.js',
         'handlebars': './libs/handlebars/dist/handlebars.min.js',
         'toastr': './libs/toastr/build/toastr.min.js',

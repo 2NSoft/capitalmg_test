@@ -50,17 +50,36 @@ const addQuestion = (model) => {
     return $.post('/api/v1/questions', model);
 };
 
-const getQuestionData = () => {
+const addExam = (model) => {
+    return $.post('/api/v1/exams', model);
+};
+
+const getQuestionCreateData = () => {
     return Promise.all([getCourses(), getQuestionTypes()]);
+};
+
+const getExamCreateData = () => {
+    return Promise.all([
+        getCourses(),
+        $.get(`templates/partials/question.handlebars`),
+    ]);
+};
+
+const getCourseQuestionsPreview = (courseId) => {
+    return $.get(`api/v1/questions?course=${courseId}&preview=true`);
 };
 
 module.exports = {
     getUserConfirmData,
     getCourseCreateData,
-    getQuestionData,
+    getExamCreateData,
+    getQuestionCreateData,
+
+    getCourseQuestionsPreview,
 
     addCourse,
     addQuestion,
+    addExam,
 
     updateUserRole,
 };

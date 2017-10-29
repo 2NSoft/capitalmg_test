@@ -39,12 +39,30 @@ const createModel = () => {
         result.title = $title.val().replace(/\n/g, '<br>');
     }
     result.options = [];
+    switch (result.type.name) {
+        case 'Multiple choice': {
+            result.single = true;
+            break;
+        }
+        case 'Multy select': {
+            result.multiple = true;
+            break;
+        }
+        case 'Open question': {
+            result.open = true;
+            break;
+        }
+        case 'Ranking': {
+            result.ranking = true;
+            break;
+        }
+        default: break;
+    }
     $('.option')
         .each((index, option) => {
             result.options.push($(option).val().replace(/\n/g, '<br>'));
         });
     if ($preview) {
-        const $form = $preview.children('form');
         result.correctAnswers = [];
         switch (result.type.name) {
             case 'Multiple choice': {
@@ -208,25 +226,7 @@ const onReview = (ev) => {
     $create.hide(200);
 
     questionModel.preview = true;
-    switch (questionModel.type.name) {
-        case 'Multiple choice': {
-            questionModel.single = true;
-            break;
-        }
-        case 'Multy select': {
-            questionModel.multiple = true;
-            break;
-        }
-        case 'Open question': {
-            questionModel.open = true;
-            break;
-        }
-        case 'Ranking': {
-            questionModel.ranking = true;
-            break;
-        }
-        default: break;
-    }
+
     loadTemplate('partials/question', questionModel)
         .then((partial) => {
             $preview
@@ -285,7 +285,7 @@ export function get(_router) {
                 router.navigate('/unauthorized');
                 return Promise.reject('Unauthorized access attempted!');
             }
-            return data.getQuestionData();
+            return data.getQuestionCreateData();
         })
         .then(([courses, questionTypes]) => {
             return loadTemplate('pages/exam.questions',

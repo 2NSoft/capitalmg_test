@@ -10,6 +10,8 @@ const attach = (app, data) => {
         require('./controllers/course.controller').init(data);
     const questionController =
         require('./controllers/question.controller').init(data);
+    const examController =
+        require('./controllers/exam.controller').init(data);
 
     app.get('/api/v1/auth', (req, res) => {
         if (req.user) {
@@ -83,6 +85,10 @@ const attach = (app, data) => {
 
     app.post('/api/v1/questions', (req, res) => {
         return questionController.addQuestion(req, res);
+    });
+
+    app.post('/api/v1/exams', (req, res) => {
+        return examController.addExam(req, res);
     });
 };
 

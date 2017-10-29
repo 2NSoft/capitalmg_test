@@ -1,0 +1,70 @@
+<main>
+    <div id="exam-create">
+        <form>
+            <fieldset>
+                <legend for="exam-course">Select Course</legend>
+                <div class="form-group">
+                    <select id="exam-course" name="exam-course" class="form-control">
+                    {{#each courses}}
+                        <option value="{{id}}" {{#unless @index}} selected {{/unless}}>{{name}}</option>
+                    {{/each}}
+                    </select>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Number of Questions</legend>
+                <div class="form-group">
+                    <input type="number" name="exam-questions-number" id="exam-questions-number" class="form-control" min="1" max="100" value="10">
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Time Slots</legend>
+                <fieldset class="form-inline">
+                    <legend>New</legend>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group date">
+                                <label for="exam-date-from">Start</label>
+                                <div class="input-group date" id="exam-date-from" name="exam-date-from">
+                                    <input type="text" class="form-control" />
+                                    <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group date">
+                                <label for="exam-date-to">End</label>
+                                <div class="input-group date" id="exam-date-to" name="exam-date-to">
+                                    <input type="text" class="form-control" />
+                                    <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="exam-btn-add-slot" class="btn btn-success pull-right">Add</button>
+                </fieldset>
+                <fieldset>
+                    <legend>Assigned</legend>
+                    <div class="form-group">
+                        <select id="exam-timeslots" name="exam-timeslots" class="form-control" multiple></select>
+                    </div>
+                </fieldset>
+            </fieldset>
+            <button id="exam-btn-continue" class="btn btn-success pull-right">Continue</button>
+            <button id="exam-btn-remove-slot" class="btn btn-primary">Remove</button>
+        </form>
+    </div>
+    <div id="exam-questions">
+        <div id="exam-questions-container">
+
+        </div>
+        <div>
+            <button id="exam-btn-revert" class="btn btn-primary">Revert</button>
+            <button id="exam-btn-submit" class="btn btn-success pull-right"><span id="exam-warning"></span></button>
+        </div>
+    </div>
+</main>

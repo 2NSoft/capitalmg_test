@@ -31,14 +31,16 @@
             <textarea id="answer-text" class="form-control" rows="10" {{#if preview}}disabled{{/if}}></textarea> 
         </div>
     {{/if}}
-    <hr class="divider">
     {{#if preview}}
+        <hr class="divider">
         <div class="form-group">
           <label for="question-score">Question Score</label>
           <input type="number" name="question-score" id="question-score" class="form-control" min="1" max="50" value="10">
         </div>
     {{/if}}
-    <button id="answer-btn-submit" class="btn btn-success pull-right">Submit</button>
+    {{#unless nosubmit}}
+        <button id="answer-btn-submit" class="btn btn-success pull-right">Submit</button>
+    {{/unless}}
     {{#if preview}}
         <button id="answer-btn-revert" class="btn btn-primary">Revert</button>
     {{/if}}
