@@ -1,0 +1,24 @@
+{{#each courses}}
+<div class='course-container'>
+    <div class="course-header">
+        <span class="course-name">{{name}}</span> 
+        {{#if preview}}
+            <button class="btn btn-primary pull-right btn-preview">{{state}}</button> 
+        {{else}}
+            <button class="btn pull-right" disabled>{{state}}</button> 
+        {{/if}}
+    </div>
+    <div class="course-exams-container">
+    {{#each exams}}
+        <div class="course-exam-container">
+            <span class="exam-name">{{name}}</span>
+            {{#if startExaminer}}
+                <button class="btn btn-success pull-right btn-start" data-examiner="{{startExaminer}}">{{state}}</button> 
+            {{else}}
+                <button class="btn {{#if completed}}btn-success{{/if}} pull-right" disabled>{{state}}</button> 
+            {{/if}}
+        </div>
+    {{/each}}
+    </div>
+</div>
+{{/each}}

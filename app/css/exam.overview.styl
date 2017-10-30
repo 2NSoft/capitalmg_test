@@ -1,0 +1,27 @@
+@require 'globals/colors';
+
+.course-header, .course-exam-container
+    min-height: 48px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 2.4;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+
+.course-container:nth-of-type(odd)
+    .course-header
+        background-color: bg-color-footer;
+
+.course-exam-container:nth-of-type(even)
+    background-color: bg-color-footer;
+
+.course-exam-container
+    margin-top: -11px;
+    margin-left: 40px;
+
+.course-exams-container
+    display: none;

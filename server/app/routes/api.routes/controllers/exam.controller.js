@@ -4,6 +4,136 @@ const moment = require('moment');
 const init = (data) => {
     const controller = {
         getExams(req, res) {
+            if (req.query.student) {
+                if (!req.user) {
+                    return res.status(403)
+                        .send('You need to be logged in!');
+                }
+                const userId = req.query.student;
+                let studentId;
+                const result = {};
+
+                return data.students.findByUserId(userId)
+                    .then((dbStudent) => {
+                        const examPromises = [];
+                        result.courses = [];
+                        studentId = dbStudent.id + '';
+                        dbStudent.courses.forEach((course) => {
+                            result.courses.push({
+                                id: course.id,
+                                name: course.name,
+                            });
+                            examPromises.push(data.exams.getAll({
+                                'course.id': { $eq: course.id },
+                            }));
+                        });
+                        return Promise.all(examPromises);
+                    })
+                    .then((dbCourseExams) => {
+                        const examinerPromises = [];
+                        dbCourseExams.forEach((courseExams, index) => {
+                            const enrolledExams = [];
+                            courseExams.forEach((exam) => {
+                                exam.timeSlots = exam.timeSlots || [];
+                                exam.timeSlots.forEach((slot) => {
+                                    slot.students = slot.students || [];
+                                    const indx = slot.students
+                                        .findIndex((student) => student.id === studentId); // eslint-disable-line max-len
+                                    if (indx !== -1) {
+                                        const slotName =
+                                            moment(new Date(slot.startDate)).format('DD.M.YY @ HH:mm') + // eslint-disable-line max-len
+                                            ' - ' +
+                                            moment(new Date(slot.endDate)).format('DD.M.YY @ HH:mm'); // eslint-disable-line max-len
+                                        enrolledExams.push({
+                                            id: exam.id + '',
+                                            name: exam.course.name + ' ' + slotName, // eslint-disable-line max-len
+                                            slot: {
+                                                startDate: slot.startDate,
+                                                endDate: slot.endDate,
+                                            },
+                                        });
+                                        examinerPromises.push(
+                                            data.examiners.getAll({
+                                                $and: [
+                                                    { 'student.id': { $eq: studentId } }, // eslint-disable-line max-len
+                                                    { 'exam.id': { $eq: exam.id + '' } }, // eslint-disable-line max-len
+                                                    { 'timeSlot.startDate': { $eq: slot.startDate } }, // eslint-disable-line max-len
+                                                    { 'timeSlot.endDate': { $eq: slot.endDate } }, // eslint-disable-line max-len
+                                                ],
+                                            }));
+                                    }
+                                });
+                            });
+                            result.courses[index].exams = enrolledExams.slice();
+                        });
+                        return Promise.all(examinerPromises);
+                    })
+                    .then((examiners) => {
+                        examiners = examiners
+                            .map( (examiner) => examiner[0] || {} )
+                            .filter( (examiner) => examiner.exam );
+                        result.courses.forEach((course) => {
+                            if (course.exams) {
+                                course.exams.forEach((exm) => {
+                                    const examiner =
+                                        examiners.find( (examnr) => {
+                                            return examnr.exam.id === exm.id &&
+                                                examnr.timeSlot.startDate === exm.slot.startDate && // eslint-disable-line max-len
+                                                examnr.timeSlot.endDate === exm.slot.endDate; // eslint-disable-line max-len
+                                        });
+                                    if (examiner) {
+                                        const now = Date.now();
+                                        const active =
+                                            new Date(examiner.timeSlot.startDate) <= now && // eslint-disable-line max-len
+                                            now < new Date(examiner.timeSlot.endDate); // eslint-disable-line max-len
+                                        exm.examiner = {
+                                            id: examiner.id + '',
+                                            active,
+                                            completed: examiner.completed,
+                                            score: examiner.score,
+                                        };
+                                    }
+                                    delete exm.timeSlot;
+                                });
+                            }
+                        });
+                        result.courses.forEach( (course) => {
+                            if (!course.exams.length) {
+                                course.state = 'Pending enrollment...';
+                            } else {
+                                course.state = 'Preview';
+                                course.preview = true;
+                            }
+                            course.exams.forEach( ( exam ) => {
+                                if (!exam.examiner) {
+                                    exam.state = 'Pending check-in...';
+                                    return true;
+                                }
+                                if (exam.examiner && exam.examiner.active) {
+                                    exam.state = 'Start exam';
+                                    exam.startExaminer = exam.examiner.id;
+                                    return true;
+                                }
+                                if (exam.examiner &&
+                                    !exam.examiner.active &&
+                                    !exam.examiner.completed) {
+                                        exam.state = 'Pending score...';
+                                        return true;
+                                    }
+                                    exam.state =
+                                    'Score: ' + exam.examiner.score;
+                                    exam.completed = true;
+                                return true;
+                            });
+                            return true;
+                        });
+                        return res.status(200).send(result);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        return res.status(500).send(err);
+                    });
+            }
             if (req.query.id && !req.query.enrolled && !req.query.checkedin) {
                 return data.exams.findById(req.query.id)
                     .then((exam) => {
@@ -119,7 +249,7 @@ const init = (data) => {
                                 }
                                 return s;
                             })
-                            .sort( (a, b) => a.id.localeCompare( b.id ));
+                            .sort((a, b) => a.id.localeCompare(b.id));
                         res.status(200).send(current);
                     })
                     .catch((err) => {

@@ -24,13 +24,6 @@ const setPrivateLinks = (role, router) => {
         $('[data-privacy]').remove();
         return true;
     }
-    if (role === 'administrator' || role === 'docent') {
-        return loadTemplate(`partials/menus/${role}.menu`)
-            .then((template) => {
-                $menu.html($menu.html() + template);
-                router.updatePageLinks();
-            });
-    }
     if (role === 'docsecretary') {
         return Promise.all([
             data.getCourses(),
@@ -56,7 +49,11 @@ const setPrivateLinks = (role, router) => {
                 router.updatePageLinks();
             });
     }
-    return true;
+    return loadTemplate(`partials/menus/${role}.menu`)
+        .then((template) => {
+            $menu.html($menu.html() + template);
+            router.updatePageLinks();
+        });
 };
 
 module.exports = {

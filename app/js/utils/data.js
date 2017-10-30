@@ -117,6 +117,12 @@ const getExamCheckInData = ( examId, slot ) => {
     ]);
 };
 
+const getExamOverviewData = ( student ) => {
+    return Promise.all( [
+        $.get(`/api/v1/exams?student=${student}`),
+    ]);
+};
+
 const checkinStudent = ( examId, slot, student ) => {
     return $.post( '/api/v1/examiners', { examId, slot, student });
 };
@@ -129,6 +135,7 @@ module.exports = {
     getCourseEnrollData,
     getExamEnrollData,
     getExamCheckInData,
+    getExamOverviewData,
 
     getCourseQuestionsPreview,
     getCourses,

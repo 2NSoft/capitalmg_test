@@ -51,6 +51,5 @@ export function get(params, router) {
             setActiveLink('Exam');
 
             $('main').on( 'click', onClick );
-        })
-        .catch((err) => console.log(err));
+        });
 }
