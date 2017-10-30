@@ -79,7 +79,7 @@ const init = (data) => {
                 return res.status(400).send('You need to be logged in!');
             }
             if (req.body.updateRole) {
-                if (req.user.role !== 'administrator') {
+                if (!req.user || req.user.role !== 'administrator') {
                     return res.status(403)
                         .send('You need to be logged in as administrator!');
                 }

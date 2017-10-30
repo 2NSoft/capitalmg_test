@@ -10,7 +10,8 @@ let $enroll;
 let $enrolled;
 let $available;
 let $remove;
-let courseId;
+let $timeSlot;
+let examId;
 
 const onSelectInput = () => {
     $enroll.prop('disabled', !$available.val().length );
@@ -40,6 +41,7 @@ const enrollStudents = (ev) => {
     ev.preventDefault();
     const selected = $available.val();
     const students = [];
+    const slot = $timeSlot.val();
     selected.forEach((student) => {
         const $current = $(`option[value=${student}]`);
         $current
@@ -47,7 +49,7 @@ const enrollStudents = (ev) => {
         insertNode($current, $enrolled);
         students.push( student );
     });
-    data.enrollStudents( { courseId, students })
+    data.enrollStudents( { examId, students, slot })
     .then( () => {
     })
     .catch( () => {
@@ -60,6 +62,7 @@ const removeStudents = (ev) => {
     ev.preventDefault();
     const selected = $enrolled.val();
     const students = [];
+    const slot = $timeSlot.val();
     selected.forEach((student) => {
         const $current = $(`option[value=${student}]`);
         $current
@@ -67,7 +70,7 @@ const removeStudents = (ev) => {
         insertNode($current, $available);
         students.push( student );
     });
-    data.removeStudents( { courseId, students })
+    data.removeStudents( { examId, students, slot })
     .then( () => {
     })
     .catch( () => {
@@ -76,38 +79,61 @@ const removeStudents = (ev) => {
     });
 };
 
+const fillOptions = ( options, $select ) => {
+    $select.children().remove();
+    options.forEach( (option) => {
+        $('<option>')
+            .prop( 'value', option.id )
+            .text( `#${option.id} - ${option.name}`)
+            .appendTo( $select );
+    });
+};
+
+const onTimeSlotChange = () => {
+    const slot = $timeSlot.val();
+    data.getEnrolled( examId, slot )
+        .then( ({ available, enrolled }) => {
+            fillOptions( available, $available );
+            fillOptions( enrolled, $enrolled );
+        });
+    onSelectInput();
+};
+
 let router;
 
 export function get(params, _router) {
     if (_router) {
         router = _router;
     }
-    courseId = params.id;
+    examId = params.id;
     return user.checkStatus()
         .then((currUser) => {
             if (currUser.role !== 'docsecretary') {
                 router.navigate('/unauthorized');
                 return Promise.reject('Unauthorized access attempted!');
             }
-            return data.getCourseEnrollData(courseId);
+            return data.getExamEnrollData(examId);
         })
-        .then(([students]) => {
-            return loadTemplate('pages/course.enroll', students );
+        .then(([examSlots]) => {
+            return loadTemplate('pages/exam.enroll', examSlots );
         })
         .then((pageTemplate) => {
             $appContainer.html(pageTemplate);
-            setActiveLink('Course');
+            setActiveLink('Exam');
 
-            $enroll = $('#course-enroll-btn-enroll')
+            $enroll = $('#exam-enroll-btn-enroll')
                 .disable();
-            $remove = $('#course-enroll-btn-remove')
+            $remove = $('#exam-enroll-btn-remove')
                 .disable();
-            $enrolled = $('#course-enroll-enrolled');
-            $available = $('#course-enroll-available');
+            $enrolled = $('#exam-enroll-enrolled');
+            $available = $('#exam-enroll-available');
+            $timeSlot = $('#exam-enroll-timeslot');
 
             $enrolled.on( 'input', onSelectInput );
             $available.on( 'input', onSelectInput );
 
+            $timeSlot.on( 'change', onTimeSlotChange );
+            onTimeSlotChange();
             $enroll.on('click', enrollStudents );
             $remove.on('click', removeStudents );
 

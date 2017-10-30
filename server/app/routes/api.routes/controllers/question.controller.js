@@ -17,7 +17,7 @@ const init = (data) => {
                 });
             }
             if (req.query.course) {
-                if (req.user.role !== 'docent') {
+                if (!req.user || req.user.role !== 'docent') {
                     return res
                         .status(403)
                         .send('You need to be logged in as docent!');
@@ -52,7 +52,7 @@ const init = (data) => {
             return true;
         },
         addQuestion(req, res) {
-            if (req.user.role !== 'docent') {
+            if (!req.user || req.user.role !== 'docent') {
                 return res
                     .status(403).send('You need to be logged in as docent!');
             }

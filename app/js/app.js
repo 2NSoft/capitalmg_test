@@ -10,6 +10,7 @@ import user from 'user';
 // import {VALIDATOR as VALIDATOR} from 'validator';
 import { setPrivateLinks } from 'navUtils';
 
+
 // Polyfill jQuery
 import 'jQueryFills';
 
@@ -23,6 +24,7 @@ import { get as examCreateController } from 'examCreateController';
 import { get as courseCreateController } from 'courseCreateController';
 import { get as userConfirmController } from 'userConfirmController';
 import { get as courseEnrollController } from 'courseEnrollController';
+import { get as examEnrollController } from 'examEnrollController';
 
 // Navigo setup
 const root = null;
@@ -100,6 +102,15 @@ router
     })
     .on('/docsecretary/course/:id', (params) => {
         return courseEnrollController(params, router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
+    .on('/docsecretary/exam/:id', (params) => {
+        return examEnrollController(params, router)
             .then(() => {
                 router.updatePageLinks();
             })

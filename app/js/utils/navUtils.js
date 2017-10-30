@@ -24,14 +24,19 @@ const setPrivateLinks = ( role, router ) => {
         $('[data-privacy]').remove();
         return true;
     }
-    return data.getCourses()
-        .then( (courses) => {
-            return loadTemplate( `partials/menus/${role}.menu`, { courses });
+    return Promise.all([
+        data.getCourses(),
+        data.getExams(),
+    ])
+        .then( ([courses, exams]) => {
+            return loadTemplate( `partials/menus/${role}.menu`,
+                { courses, exams });
         })
         .then((template) => {
             $menu.html( $menu.html() + template);
             router.updatePageLinks();
-        });
+        })
+        .catch((err)=>console.log(err));
 };
 
 module.exports = {

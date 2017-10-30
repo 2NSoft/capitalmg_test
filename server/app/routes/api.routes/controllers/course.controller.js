@@ -46,7 +46,7 @@ const init = (data) => {
                 });
         },
         addCourse(req, res) {
-            if (req.user.role !== 'administrator') {
+            if (!req.user || req.user.role !== 'administrator') {
                 return res.status(403)
                     .send('You need to be logged in as administrator!');
             }
@@ -93,12 +93,12 @@ const init = (data) => {
                 });
         },
         updateCourse(req, res) {
-            // if (req.query.enroll || req.query.remove) {
-            //     if (req.user.role !== 'docsecretary') {
-            //         return res.status(403)
-            //             .send('You need to be logged in as secretary!');
-            //     }
-            // }
+            if (req.query.enroll || req.query.remove) {
+                if (!req.user || req.user.role !== 'docsecretary') {
+                    return res.status(403)
+                        .send('You need to be logged in as secretary!');
+                }
+            }
             if (req.query.enroll) {
                 const courseId = req.query.id;
                 const students = req.body.students;
@@ -175,7 +175,6 @@ const init = (data) => {
                         return res.status(200).send();
                     })
                     .catch((err) => {
-                        console.log(err);
                         return res.status(500).send(err);
                     });
             }

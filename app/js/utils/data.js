@@ -32,6 +32,10 @@ const getCourses = () => {
     return $.get('/api/v1/courses');
 };
 
+const getExams = () => {
+    return $.get('/api/v1/exams');
+};
+
 const getQuestionTypes = () => {
     return $.get('/api/v1/questions?questiontypes=true');
 };
@@ -75,6 +79,12 @@ const getCourseEnrollData = (id) => {
     ]);
 };
 
+const getExamEnrollData = (id) => {
+    return Promise.all( [
+        $.get(`/api/v1/exams?id=${id}`),
+    ]);
+};
+
 const enrollStudents = ( model ) => {
     if (model.courseId) {
         const query = `id=${model.courseId}&enroll=true`;
@@ -93,15 +103,22 @@ const removeStudents = ( model ) => {
     return $.put( `/api/v1/exams?${query}`, model );
 };
 
+const getEnrolled = ( examId, slot ) => {
+    return $.get(`/api/v1/exams?id=${examId}&slot=${slot}&enrolled=true`);
+};
+
 module.exports = {
     getUserConfirmData,
     getCourseCreateData,
     getExamCreateData,
     getQuestionCreateData,
     getCourseEnrollData,
+    getExamEnrollData,
 
     getCourseQuestionsPreview,
     getCourses,
+    getExams,
+    getEnrolled,
 
     addCourse,
     addQuestion,

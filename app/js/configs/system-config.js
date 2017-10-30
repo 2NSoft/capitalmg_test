@@ -17,7 +17,6 @@ System.config({
         'jQueryFills': 'js/utils/jQueryFills.js',
         'copyObject': 'js/utils/copyObject.js',
         'validator': 'js/helpers/validator.js',
-        'quoteHelper': 'js/helpers/quote.helper.js',
 
         // Controllers
         'homeController': 'js/controllers/home.controller.js',
@@ -27,6 +26,7 @@ System.config({
         'examCreateController': 'js/controllers/exam.create.controller.js',
         'courseCreateController': 'js/controllers/course.create.controller.js',
         'courseEnrollController': 'js/controllers/course.enroll.controller.js',
+        'examEnrollController': 'js/controllers/exam.enroll.controller.js',
         'registerController': 'js/controllers/register.controller.js',
 
         // Library files

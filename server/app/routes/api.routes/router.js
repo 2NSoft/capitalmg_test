@@ -91,8 +91,16 @@ const attach = (app, data) => {
         return questionController.addQuestion(req, res);
     });
 
+    app.get('/api/v1/exams', (req, res) => {
+        return examController.getExams(req, res);
+    });
+
     app.post('/api/v1/exams', (req, res) => {
         return examController.addExam(req, res);
+    });
+
+    app.put('/api/v1/exams', (req, res) => {
+        return examController.updateExam(req, res);
     });
 };
 
