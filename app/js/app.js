@@ -22,6 +22,7 @@ import { get as examQuestionsController } from 'examQuestionsController';
 import { get as examCreateController } from 'examCreateController';
 import { get as courseCreateController } from 'courseCreateController';
 import { get as userConfirmController } from 'userConfirmController';
+import { get as courseEnrollController } from 'courseEnrollController';
 
 // Navigo setup
 const root = null;
@@ -97,6 +98,15 @@ router
                 toastr.error(err);
             });
     })
+    .on('/docsecretary/course/:id', (params) => {
+        return courseEnrollController(params, router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
     .notFound(() => {
         console.log('Not found');
     })
@@ -107,7 +117,6 @@ user.onStatusChange = (usr) => {
     const signInBtn = $('#sign-in-btn');
     const registerBtn = $('#register-btn');
     if (usr.signedIn) {
-        setPrivateLinks(user.role);
         registerBtn.hide();
         signInBtn.text('Sign out');
         signInBtn.attr('href', '/home');
@@ -117,11 +126,11 @@ user.onStatusChange = (usr) => {
             initial = false;
         }
     } else {
-        setPrivateLinks(user.role);
         registerBtn.show();
         signInBtn.text('Sign in');
         signInBtn.attr('href', '/signin');
     }
+    setPrivateLinks(user.role, router);
 };
 
 user.checkStatus(true);

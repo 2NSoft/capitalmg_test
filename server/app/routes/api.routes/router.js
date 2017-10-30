@@ -79,6 +79,10 @@ const attach = (app, data) => {
         return courseController.addCourse(req, res);
     });
 
+    app.put('/api/v1/courses', (req, res) => {
+        return courseController.updateCourse(req, res);
+    });
+
     app.get('/api/v1/questions', (req, res) => {
         return questionController.getQuestions(req, res);
     });

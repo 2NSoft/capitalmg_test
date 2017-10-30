@@ -69,17 +69,46 @@ const getCourseQuestionsPreview = (courseId) => {
     return $.get(`api/v1/questions?course=${courseId}&preview=true`);
 };
 
+const getCourseEnrollData = (id) => {
+    return Promise.all( [
+        $.get(`/api/v1/courses?id=${id}&enrolled=true`),
+    ]);
+};
+
+const enrollStudents = ( model ) => {
+    if (model.courseId) {
+        const query = `id=${model.courseId}&enroll=true`;
+        return $.put( `/api/v1/courses?${query}`, model );
+    }
+    const query = `id=${model.examId}&enroll=true`;
+    return $.put( `/api/v1/exams?${query}`, model );
+};
+
+const removeStudents = ( model ) => {
+    if (model.courseId) {
+        const query = `id=${model.courseId}&remove=true`;
+        return $.put( `/api/v1/courses?${query}`, model );
+    }
+    const query = `id=${model.examId}&remove=true`;
+    return $.put( `/api/v1/exams?${query}`, model );
+};
+
 module.exports = {
     getUserConfirmData,
     getCourseCreateData,
     getExamCreateData,
     getQuestionCreateData,
+    getCourseEnrollData,
 
     getCourseQuestionsPreview,
+    getCourses,
 
     addCourse,
     addQuestion,
     addExam,
+
+    enrollStudents,
+    removeStudents,
 
     updateUserRole,
 };

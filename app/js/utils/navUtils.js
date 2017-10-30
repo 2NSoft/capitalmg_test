@@ -1,7 +1,10 @@
 /* globals $ toastr */
 
-const $menu = $('.navbar-collapse ul');
-const $private = $('[data-privacy]');
+import { load as loadTemplate } from 'templates';
+import data from 'data';
+
+const $menu = $('#menu');
+
 
 const setActiveLink = (linkName) => {
     $menu
@@ -16,15 +19,19 @@ const setActiveLink = (linkName) => {
         });
 };
 
-const setPrivateLinks = ( role ) => {
-    $private.each((index, link) => {
-        const $link = $(link);
-        if ($link.attr('data-privacy') === `${role}-menu`) {
-            $link.show();
-        } else {
-            $link.hide();
-        }
-    });
+const setPrivateLinks = ( role, router ) => {
+    if (!role) {
+        $('[data-privacy]').remove();
+        return true;
+    }
+    return data.getCourses()
+        .then( (courses) => {
+            return loadTemplate( `partials/menus/${role}.menu`, { courses });
+        })
+        .then((template) => {
+            $menu.html( $menu.html() + template);
+            router.updatePageLinks();
+        });
 };
 
 module.exports = {

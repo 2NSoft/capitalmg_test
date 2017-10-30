@@ -1,0 +1,26 @@
+<main>
+    <form>
+        <fieldset>
+            <legend>Available Students</legend>
+            <div class="form-group">
+                <select id="course-enroll-available" class="form-control enroll-select" multiple>
+                {{#each available}}
+                    <option value="{{id}}">#{{id}} - {{name}}</option>
+                {{/each}}
+                </select>
+            </div>
+            <button id="course-enroll-btn-enroll" class="btn btn-success">Enroll</button>
+        </fieldset>
+        <fieldset>
+            <legend>Enrolled Students</legend>
+            <div class="form-group">
+                <select id="course-enroll-enrolled" class="form-control enroll-select" multiple>
+                {{#each enrolled}}
+                    <option value="{{id}}">#{{id}} - {{name}}</option>
+                {{/each}}
+                </select>
+            </div>
+            <button id="course-enroll-btn-remove" class="btn btn-primary">Remove</button>
+        </fieldset>
+    </form>
+</main>
