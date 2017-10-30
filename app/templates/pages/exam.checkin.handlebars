@@ -1,0 +1,12 @@
+<main>
+    {{#each students}}
+    <div class="checkin-box">
+        #{{id}} - {{name}} 
+        {{#if examinerId}}
+        <button class="btn pull-right" disabled>Examiner #{{examinerId}}</button> 
+        {{else}}
+        <button class="btn btn-success btn-checkin pull-right" data-student="{{id}}">Check in</button> 
+        {{/if}}
+    </div>
+    {{/each}}
+</main>

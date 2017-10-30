@@ -36,6 +36,10 @@ const getExams = () => {
     return $.get('/api/v1/exams');
 };
 
+const getCurrentExams = () => {
+    return $.get('/api/v1/exams?current=true');
+};
+
 const getQuestionTypes = () => {
     return $.get('/api/v1/questions?questiontypes=true');
 };
@@ -107,6 +111,16 @@ const getEnrolled = ( examId, slot ) => {
     return $.get(`/api/v1/exams?id=${examId}&slot=${slot}&enrolled=true`);
 };
 
+const getExamCheckInData = ( examId, slot ) => {
+    return Promise.all( [
+        $.get(`/api/v1/exams?id=${examId}&slot=${slot}&checkedin=true`),
+    ]);
+};
+
+const checkinStudent = ( examId, slot, student ) => {
+    return $.post( '/api/v1/examiners', { examId, slot, student });
+};
+
 module.exports = {
     getUserConfirmData,
     getCourseCreateData,
@@ -114,10 +128,12 @@ module.exports = {
     getQuestionCreateData,
     getCourseEnrollData,
     getExamEnrollData,
+    getExamCheckInData,
 
     getCourseQuestionsPreview,
     getCourses,
     getExams,
+    getCurrentExams,
     getEnrolled,
 
     addCourse,
@@ -126,6 +142,7 @@ module.exports = {
 
     enrollStudents,
     removeStudents,
+    checkinStudent,
 
     updateUserRole,
 };

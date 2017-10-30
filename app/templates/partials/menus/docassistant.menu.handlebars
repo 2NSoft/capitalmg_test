@@ -1,0 +1,10 @@
+{{#if exams.length}}
+<li data-privacy="docassistant-menu">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exam</a>
+    <ul class="dropdown-menu">
+        {{#each exams}}
+            <li><a class="dropdown-item" href="/docassistant/exam/{{id}}" data-navigo>{{name}}</a></li>
+        {{/each}}
+    </ul>
+</li>
+{{/if}}

@@ -27,6 +27,7 @@ System.config({
         'courseCreateController': 'js/controllers/course.create.controller.js',
         'courseEnrollController': 'js/controllers/course.enroll.controller.js',
         'examEnrollController': 'js/controllers/exam.enroll.controller.js',
+        'examCheckInController': 'js/controllers/exam.checkin.controller.js',
         'registerController': 'js/controllers/register.controller.js',
 
         // Library files

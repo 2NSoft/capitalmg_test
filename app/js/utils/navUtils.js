@@ -9,9 +9,9 @@ const $menu = $('#menu');
 const setActiveLink = (linkName) => {
     $menu
         .children()
-        .each( (index, item) => {
+        .each((index, item) => {
             const link = $($(item).find('a').eq(0));
-            if (link.text()===linkName) {
+            if (link.text() === linkName) {
                 link.addClass('isActive');
             } else {
                 link.removeClass('isActive');
@@ -19,27 +19,47 @@ const setActiveLink = (linkName) => {
         });
 };
 
-const setPrivateLinks = ( role, router ) => {
+const setPrivateLinks = (role, router) => {
     if (!role) {
         $('[data-privacy]').remove();
         return true;
     }
-    return Promise.all([
-        data.getCourses(),
-        data.getExams(),
-    ])
-        .then( ([courses, exams]) => {
-            return loadTemplate( `partials/menus/${role}.menu`,
-                { courses, exams });
-        })
-        .then((template) => {
-            $menu.html( $menu.html() + template);
-            router.updatePageLinks();
-        })
-        .catch((err)=>console.log(err));
+    if (role === 'administrator' || role === 'docent') {
+        return loadTemplate(`partials/menus/${role}.menu`)
+            .then((template) => {
+                $menu.html($menu.html() + template);
+                router.updatePageLinks();
+            });
+    }
+    if (role === 'docsecretary') {
+        return Promise.all([
+            data.getCourses(),
+            data.getExams(),
+        ])
+            .then(([courses, exams]) => {
+                return loadTemplate(`partials/menus/${role}.menu`,
+                    { courses, exams });
+            })
+            .then((template) => {
+                $menu.html($menu.html() + template);
+                router.updatePageLinks();
+            });
+    }
+    if (role === 'docassistant') {
+        return data.getCurrentExams()
+            .then((exams) => {
+                return loadTemplate(`partials/menus/${role}.menu`,
+                    { exams });
+            })
+            .then((template) => {
+                $menu.html($menu.html() + template);
+                router.updatePageLinks();
+            });
+    }
+    return true;
 };
 
 module.exports = {
     setActiveLink,
     setPrivateLinks,
- };
+};

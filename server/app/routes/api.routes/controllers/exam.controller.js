@@ -4,7 +4,7 @@ const moment = require('moment');
 const init = (data) => {
     const controller = {
         getExams(req, res) {
-            if (req.query.id && !req.query.enrolled) {
+            if (req.query.id && !req.query.enrolled && !req.query.checkedin) {
                 return data.exams.findById(req.query.id)
                     .then((exam) => {
                         const result = {
@@ -63,6 +63,64 @@ const init = (data) => {
                         enrolled =
                             enrolled.sort((a, b) => a.id.localeCompare(b.id));
                         return res.status(200).send({ available, enrolled });
+                    })
+                    .catch((err) => {
+                        return res.status(500).send(err);
+                    });
+            }
+            if (req.query.current) {
+                return data.exams.getAll()
+                    .then((dbExams) => {
+                        const current = [];
+                        dbExams.forEach((dbExam) => {
+                            dbExam.timeSlots = dbExam.timeSlots || [];
+                            dbExam.timeSlots.forEach((slot, index) => {
+                                const now = Date.now();
+                                if (new Date(slot.startDate) <= now &&
+                                    now < new Date(slot.endDate)) {
+                                    current.push({
+                                        name: dbExam.course.name,
+                                        id: dbExam._id + '/' + index,
+                                    });
+                                }
+                            });
+                        });
+                        res.status(200).send(current);
+                    })
+                    .catch((err) => {
+                        return res.status(500).send(err);
+                    });
+            }
+            if (req.query.checkedin) {
+                const examId = req.query.id;
+                const slot = req.query.slot;
+                let enrolled;
+                return data.exams.findById(examId)
+                    .then((dbExam) => {
+                        enrolled = dbExam.timeSlots[slot].students.slice();
+                        const studentPromises = [];
+                        enrolled.forEach((student) => {
+                            studentPromises.push(
+                                data.examiners.getAll({
+                                    $and: [
+                                        { 'student.id': { $eq: student.id } },
+                                        { 'exam.id': { $eq: examId } },
+                                    ],
+                                })
+                            );
+                        });
+                        return Promise.all(studentPromises);
+                    })
+                    .then((examiners) => {
+                        const current = enrolled
+                            .map((s, index) => {
+                                if (examiners[index].length) {
+                                    s.examinerId = examiners[index][0].id + '';
+                                }
+                                return s;
+                            })
+                            .sort( (a, b) => a.id.localeCompare( b.id ));
+                        res.status(200).send(current);
                     })
                     .catch((err) => {
                         return res.status(500).send(err);
@@ -165,10 +223,10 @@ const init = (data) => {
                             dbExam.timeSlots[slot].students || [];
                         dbExam.timeSlots[slot].students =
                             dbExam.timeSlots[slot].students.filter((std) => {
-                                    return students.findIndex((student) => {
-                                        return student === std.id;
-                                    }) === -1;
-                                });
+                                return students.findIndex((student) => {
+                                    return student === std.id;
+                                }) === -1;
+                            });
                         return data.exams.updateById(dbExam);
                     })
                     .then(() => {

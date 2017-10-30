@@ -12,6 +12,8 @@ const attach = (app, data) => {
         require('./controllers/question.controller').init(data);
     const examController =
         require('./controllers/exam.controller').init(data);
+    const examinerController =
+        require('./controllers/examiner.controller').init(data);
 
     app.get('/api/v1/auth', (req, res) => {
         if (req.user) {
@@ -101,6 +103,10 @@ const attach = (app, data) => {
 
     app.put('/api/v1/exams', (req, res) => {
         return examController.updateExam(req, res);
+    });
+
+    app.post('/api/v1/examiners', (req, res) => {
+        return examinerController.addExaminer(req, res);
     });
 };
 
