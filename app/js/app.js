@@ -27,6 +27,7 @@ import { get as courseEnrollController } from 'courseEnrollController';
 import { get as examEnrollController } from 'examEnrollController';
 import { get as examCheckInController } from 'examCheckInController';
 import { get as examOverviewController } from 'examOverviewController';
+import { get as examinerController } from 'examinerController';
 
 // Navigo setup
 const root = null;
@@ -131,6 +132,15 @@ router
     })
     .on('/student/exams', () => {
         return examOverviewController(router)
+            .then(() => {
+                router.updatePageLinks();
+            })
+            .catch((err) => {
+                toastr.error(err);
+            });
+    })
+    .on('/student/examiner/:id', (params) => {
+        return examinerController(params, router)
             .then(() => {
                 router.updatePageLinks();
             })

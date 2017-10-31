@@ -105,6 +105,10 @@ const attach = (app, data) => {
         return examController.updateExam(req, res);
     });
 
+    app.get('/api/v1/examiners', (req, res) => {
+        return examinerController.getExaminer(req, res);
+    });
+
     app.post('/api/v1/examiners', (req, res) => {
         return examinerController.addExaminer(req, res);
     });

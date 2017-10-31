@@ -8,6 +8,8 @@ import data from 'data';
 const $appContainer = $('#app-container');
 let $name;
 let $docent;
+let $submit;
+let $select;
 
 const formSubmit = (ev) => {
     ev.preventDefault();
@@ -24,6 +26,11 @@ const formSubmit = (ev) => {
         .catch( (err) => {
             toastr.error( err, 'Could not create course!');
         });
+};
+
+const onSelected = (ev) => {
+    ev.preventDefault();
+    $submit.enable();
 };
 
 export function get(router) {
@@ -44,7 +51,11 @@ export function get(router) {
 
             $name = $('#course-name');
             $docent = $('#course-docent');
+            $submit = $('#course-btn-submit');
+            $submit.disable();
+            $select = $('#course-docent');
 
+            $select.on('input', onSelected );
             $('form').submit(formSubmit);
         });
 }
